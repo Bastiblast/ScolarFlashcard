@@ -180,6 +180,7 @@ function handlerOnTrainingValidClick(trainer){
     if(inputMot.value){
     if(!inputMot.classList.contains("hidden")){inputMot.classList.toggle("hidden")}
     console.log("click")
+    trainingWordSentence.classList.add("hidden")
     feedBack.classList.toggle("hidden")
     console.log(trainer._trainingCount)
     console.log({trainer})
@@ -187,7 +188,7 @@ function handlerOnTrainingValidClick(trainer){
     console.log(`Il fallait écrire "${trainingWord.textContent}".`)
     console.log(`La réponse donnée est "${inputMot.value}".`)
 
-    feedBack.textContent = `Ta réponse est "${inputMot.value}", confirme pour passer au mot suivant.`
+    feedBack.innerHTML = `<p>Ta réponse est : <br/><b>"${inputMot.value}"</b>,<br/> confirme pour passer au mot suivant.</p>`
   
     answerModify.classList.toggle("hidden")
     trainingWord.classList.toggle("hidden")
@@ -200,18 +201,24 @@ function handlerOnTrainingValidClick(trainer){
 }
 
 function handlerOnTrainingConfirmClick(trainer){
+    let isCorrect
+    trainingWordSentence.classList.remove("hidden")
     console.log("nextBtn contains hidden",nextBtn.classList.contains("hidden"))
     nextBtn.classList.toggle("hidden")
     trainingConfirm.classList.toggle("hidden")
     feedBack.classList.remove("hidden")
 answerModify.classList.add("hidden")
     if (inputMot.value === trainingWord.textContent){
-        trainer._score++
+        trainer.increaseScore()
+        trainer.newResult()
+    } else {
+        trainer._result.push(trainer._processingWord + ":" + false)
     }
         trainingNextWord(trainer)
 }
 
 function answerReset(trainer){
+    trainingWordSentence.classList.remove("hidden")
     if(!nextBtn.classList.contains("hidden")){nextBtn.classList.toggle("hidden")}
     feedBack.classList.toggle("hidden")
     answerModify.classList.add("hidden")

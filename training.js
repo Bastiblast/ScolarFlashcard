@@ -55,7 +55,7 @@ export class TrainingSession {
     _remainingWord = undefined
     _processingWord = ""
     _score = 0
-
+    _result = {}
     getRemainingWord(){
         
         if(!this._remainingWord){this._remainingWord = [...this.wordList]}
@@ -72,11 +72,18 @@ export class TrainingSession {
         return this.wordList.length
     }
 
+    increaseScore(){
+        this._score ++
+    }
         get trainingMaxCount(){
             return this.wordList.length
         }
     trainingCountIncrement(){
         this._trainingCount += 1
+    }
+
+    set newResult(result){
+this._result.push(result)
     }
 
     get trainingCountNumber(){
