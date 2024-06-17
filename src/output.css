@@ -795,3 +795,9 @@ video {
     width: 75%;
   }
 }
+
+@media (min-width: 768px) {
+  .md\:top-1\/2 {
+    top: 50%;
+  }
+}
