@@ -631,6 +631,10 @@ video {
   height: max-content;
 }
 
+.h-auto {
+  height: auto;
+}
+
 .w-1\/4 {
   width: 25%;
 }

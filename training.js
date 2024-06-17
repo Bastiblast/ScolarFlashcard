@@ -55,7 +55,7 @@ export class TrainingSession {
     _remainingWord = undefined
     _processingWord = ""
     _score = 0
-    _result = {}
+    _result = []
     getRemainingWord(){
         
         if(!this._remainingWord){this._remainingWord = [...this.wordList]}
@@ -82,7 +82,7 @@ export class TrainingSession {
         this._trainingCount += 1
     }
 
-    set newResult(result){
+    newResult(result){
 this._result.push(result)
     }
 
@@ -90,6 +90,20 @@ this._result.push(result)
         return this._trainingCount
     }
 
+    renderResult(){
+        const result = []
+        console.log("this._result",this._result)
+        this._result.forEach(res => {
+            const [toDo, Do] = res
+            console.log("res",res,{toDo},{Do})
+            const isCorrect = toDo === Do ? "égale à" : "différent de"
+            const isCorrectClass = toDo === Do ? "bg-green-500" : "bg-red-500"
+            result.push(`<p${isCorrectClass}><b>${Do}</b> est ${isCorrect} <b>${toDo}</b></p>`)
+        })
+        const joinResult = result.join(",").replaceAll(",","")
+        console.log({joinResult})
+        return joinResult
+    }
     getNextWord(){
    
         this.trainingCountIncrement()

@@ -106,7 +106,7 @@ function hiddenTO(trainingWord,wordHide) {
         inputMot.removeAttribute("readonly")
         inputMot.select()
     if(!trainingWord.classList.contains("hidden")){trainingWord.classList.toggle("hidden")}
-}, 5000);
+}, 1000);
 
 }
 
@@ -157,7 +157,10 @@ function trainingNextWord(trainer){
     if(!feedBack.classList.contains("hidden")){trainingWord.classList.toggle("hidden")}
     console.log("trainer._trainingCount === trainer.trainingMaxCount",trainer._trainingCount, trainer.trainingMaxCount,trainer._trainingCount === trainer.trainingMaxCount)
     if(trainer._trainingCount === trainer.trainingMaxCount){
-        feedBack.textContent = `Ton score final est de ${trainer._score}/${trainer.trainingMaxCount}`}
+        trainingWordSentence.classList.add("hidden")
+        trainingWord.classList.add("hidden")
+        feedBack.innerHTML = `<tr><b>Ton score final est de ${trainer._score}/${trainer.trainingMaxCount}</b></tr>`
+    feedBack.innerHTML += trainer.renderResult()}
         else {
     trainingMaxCount.textContent = trainer.totalWordCount
     feedBack.classList.toggle("hidden")
@@ -201,7 +204,7 @@ function handlerOnTrainingValidClick(trainer){
 }
 
 function handlerOnTrainingConfirmClick(trainer){
-    let isCorrect
+    let isCorrect = ""
     trainingWordSentence.classList.remove("hidden")
     console.log("nextBtn contains hidden",nextBtn.classList.contains("hidden"))
     nextBtn.classList.toggle("hidden")
@@ -209,11 +212,16 @@ function handlerOnTrainingConfirmClick(trainer){
     feedBack.classList.remove("hidden")
 answerModify.classList.add("hidden")
     if (inputMot.value === trainingWord.textContent){
-        trainer.increaseScore()
-        trainer.newResult()
-    } else {
-        trainer._result.push(trainer._processingWord + ":" + false)
-    }
+               trainer.increaseScore()
+    } 
+    isCorrect = inputMot.value
+    const lastWord = trainer._processingWord[0]
+    console.log({lastWord})
+
+    const newResult = [lastWord, isCorrect]
+    console.log({newResult})
+    trainer.newResult(newResult)
+console.log("trainer.renderResult()",trainer.renderResult())
         trainingNextWord(trainer)
 }
 
