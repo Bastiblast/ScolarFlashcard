@@ -117,6 +117,7 @@ function handlerOnTrainingBtnClick(){
             trainingNext.classList.toggle("hidden")
         trainingNextWord(trainer)
         inputMot.focus()
+        inputMot.removeAttribute("readonly")
         inputMot.select()
 
 }
