@@ -21,7 +21,10 @@ const trainingCount = trainingCard.querySelector("#training-count")
 const trainingMaxCount = trainingCard.querySelector("#training-max-count")
 const validInput = document.querySelector("#training-valid")
 const trainingNext = document.querySelector("#training-next")
-const isCorrect = trainingCard.querySelector("#is-correct")
+const answerModify = document.querySelector("#answer-modify")
+const trainingConfirm = document.querySelector("#training-confirm")
+
+const feedBack = trainingCard.querySelector("#is-correct")
 const inputMot = trainingCard.querySelector("#input-mot")
 
 
@@ -106,7 +109,7 @@ function eventOnTrainingBtnClick(){
 }
 
 function handlerOnTrainingBtnClick(){
-    isCorrect.classList.toggle("hidden")
+    feedBack.classList.toggle("hidden")
     trainingCount.innerText = 0
 
         var trainer = new Training(listeMot15,"test")
@@ -125,10 +128,10 @@ function handlerOnTrainingBtnClick(){
 function trainingNextWord(trainer){
     console.log("trainer._trainingCount === trainer.trainingMaxCount",trainer._trainingCount, trainer.trainingMaxCount,trainer._trainingCount === trainer.trainingMaxCount)
     if(trainer._trainingCount === trainer.trainingMaxCount){
-        isCorrect.textContent = `Ton score final est de ${trainer._score}/${trainer.trainingMaxCount}`}
+        feedBack.textContent = `Ton score final est de ${trainer._score}/${trainer.trainingMaxCount}`}
         else {
     trainingMaxCount.textContent = trainer.totalWordCount
-    isCorrect.classList.toggle("hidden")
+    feedBack.classList.toggle("hidden")
 
     inputMot.value = ""
      hiddenTO(motAEcrire,trainer)
@@ -149,19 +152,23 @@ function trainingCourse(trainer){
 
 function handlerOnTrainingValidClick(trainer){
     console.log("click")
-    isCorrect.classList.toggle("hidden")
+    feedBack.classList.toggle("hidden")
     console.log(trainer._trainingCount)
     console.log({trainer})
     trainingCount.innerText = trainer._trainingCount
     console.log(`Il fallait écrire "${motAEcrire.textContent}".`)
     console.log(`La réponse donnée est "${inputMot.value}".`)
 
+    feedBack.textContent = `Ta réponse est "${inputMot.value}", confirme pour passer au mot suivant.`
+    trainingConfirm.addEventListener("click",function(){handlerOnTrainingConfirmClick(trainer)})
+
     if (inputMot.value === motAEcrire.textContent){
-        isCorrect.textContent = "Bien joué !"
-        trainer._score++
-        isCorrect.classList.toggle("bg-green-500")
-        isCorrect.classList.toggle("bg-orange-400")
-    } else (isCorrect.textContent = "Mauvaise réponse !")
+    motAEcrire.classList.toggle("hidden")
+    trainer._score++
+        answerModify.addEventListener("click",function(){answerReset(trainer)})
+        answerModify.classList.toggle("hidden")
+  
+    } else (feedBack.textContent = "Mauvaise réponse !")
     motAEcrire.classList.toggle("hidden")
     validInput.classList.toggle("hidden")
     trainingNext.addEventListener("click",function(){trainingNextWord(trainer)},{"once":true})
@@ -171,6 +178,20 @@ function handlerOnTrainingValidClick(trainer){
 
 }
 
+function handlerOnTrainingConfirmClick(trainer){
+
+}
+
+function answerReset(trainer){
+    feedBack.classList.toggle("hidden")
+    trainingNext.classList.toggle("hidden")
+    validInput.classList.toggle("hidden")
+        answerModify.classList.toggle("hidden")
+        motAEcrire.classList.toggle("hidden")
+    inputMot.value = null
+    
+
+}
 async function clickHandlerTrainingBtn(){
     
     displayBtn.addEventListener("click",function() {    

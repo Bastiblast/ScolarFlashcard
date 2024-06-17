@@ -50,3 +50,7 @@ return this._processingWord
         return Math.round(Math.random() * (max - min) + min);
     }
 }
+
+export class Card {
+    
+}
