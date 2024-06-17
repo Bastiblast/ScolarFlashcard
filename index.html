@@ -27,20 +27,24 @@
             </div>  
 
             <div id="training-card" class="relative flex flex-col items-center hidden w-1/4 p-4 font-thin align-middle shadow-sm max-md:w-3/4 shadow-amber-400 bg-lime-200">
-                <div class="absolute top-0 right-0 flex flex-row float-right">
+                <div id="training-count-div" class="absolute top-0 right-0 flex flex-row float-right">
                     <div id="training-count"></div>/<div></div><div id="training-max-count">
                     </div>
                 </div>
+                <p id="consigne" class="flex items-center text-xl font-semibold text-center rounded shadow-sm w-fit">Lis le mot puis réécris le lorsqu'il disparait.</p>
                 <p id="mot-a-ecrire" class="flex items-center text-xl font-semibold rounded shadow-sm w-fit">Mot à écrire : </p><p class="text-xl" id="le-mot"></p>
+                <p class="text-xl" id="le-mot"></p>
+                <div class="z-10 flex items-center h-32 p-3 m-3 align-middle bg-orange-400 w-fit" id="is-correct">
+                </div>
                 <input readonly="readonly" autocapitalize="off" autocomplete="off" spellcheck="false" class="text-xl text-center" type="text" placeholder="écris ce mot~" id="input-mot">
                 <div class="flex flex-row">
+                    <button class="p-2 m-3 bg-yellow-300 rounded-md shadow-md" id="training-start">Commencer</button>
                     <button class="p-2 m-3 bg-yellow-300 rounded-md shadow-md" id="training-valid">Valider</button>
-                    <button class="hidden p-2 m-3 bg-yellow-300 rounded-md shadow-md" id="training-next">Suivant</button>
-                    <button class="hidden p-2 m-3 bg-yellow-300 rounded-md shadow-md" id="training-confirm">Confirm</button>
-                    <button class="hidden p-2 m-3 bg-yellow-300 rounded-md shadow-md" id="answer-modify">Modifier</button>
+                    <button class="p-2 m-3 bg-yellow-300 rounded-md shadow-md" id="training-next">Suivant</button>
+                    <button class="p-2 m-3 bg-yellow-300 rounded-md shadow-md" id="training-confirm">Confirmer</button>
+                    <button class="p-2 m-3 bg-yellow-300 rounded-md shadow-md" id="answer-modify">Modifier</button>
                 </div>
-                <div class="z-10 flex items-center hidden h-32 p-3 m-3 align-middle bg-orange-400 w-fit" id="is-correct">
-                </div>
+
             </div>
 
 

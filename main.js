@@ -1,4 +1,4 @@
-import {Training} from "./training.js"
+import {Training, TrainingSession} from "./training.js"
 
 // Global Déclaration //
 
@@ -16,11 +16,14 @@ const listeMot15 = ["le chapeau","bonhomme","la fleur","un gâteau","il a","elle
 
 
 const trainingCard = document.querySelector("#training-card")
-const motAEcrire = trainingCard.querySelector("#le-mot")
+const trainingConsigne = document.querySelector("#consigne")
+const trainingWord = trainingCard.querySelector("#le-mot")
+const trainingWordSentence = trainingCard.querySelector("#mot-a-ecrire") 
 const trainingCount = trainingCard.querySelector("#training-count")
 const trainingMaxCount = trainingCard.querySelector("#training-max-count")
-const validInput = document.querySelector("#training-valid")
-const trainingNext = document.querySelector("#training-next")
+const validBtn = document.querySelector("#training-valid")
+const startBtn = document.querySelector("#training-start")
+const nextBtn = document.querySelector("#training-next")
 const answerModify = document.querySelector("#answer-modify")
 const trainingConfirm = document.querySelector("#training-confirm")
 
@@ -30,6 +33,11 @@ const inputMot = trainingCard.querySelector("#input-mot")
 
 
 machination()
+
+// Training test
+
+const test = new Training()
+console.log(test)
 
 /*
 trainingTry()
@@ -91,34 +99,52 @@ function appendListeDesMots(){
     ulListe.append(newDiv)
 }
 
-function hiddenTO(motAEcrire,trainer) {setTimeout(() => {
-    trainingCourse(trainer)
-
-    const displayBtn = document.querySelector("#display-btn")
-    displayBtn.addEventListener("click",clickHandlerTrainingBtn,{"once":true})
-    motAEcrire.classList.toggle("hidden")
+function hiddenTO(trainingWord,wordHide) {
+    wordHide = setTimeout(() => {
+        inputMot.classList.toggle("hidden")
+        inputMot.focus()
+        inputMot.removeAttribute("readonly")
+        inputMot.select()
+    if(!trainingWord.classList.contains("hidden")){trainingWord.classList.toggle("hidden")}
 }, 5000);
 
 }
 
 function eventOnTrainingBtnClick(){
 
-    displayBtn.addEventListener("click",handlerOnTrainingBtnClick
-        ,{"once":true})
+    displayBtn.addEventListener("click",function(){handlerOnTrainingBtnClick()})
     
 }
 
 function handlerOnTrainingBtnClick(){
-    feedBack.classList.toggle("hidden")
     trainingCount.innerText = 0
 
-        var trainer = new Training(listeMot15,"test")
-        displayBtn.classList.toggle("hidden")
-        trainingCard.classList.toggle("hidden")
-            theListe.classList.toggle("hidden")
-            validInput.classList.toggle("hidden")
-            trainingNext.classList.toggle("hidden")
-        trainingNextWord(trainer)
+        var trainer = new TrainingSession(listeMot15,"test")
+        displayBtn.classList.add("hidden")
+        trainingCard.classList.add("hidden")
+            theListe.classList.add("hidden")
+        trainingCard.classList.remove("hidden")
+        validBtn.classList.add("hidden")
+        trainingConfirm.classList.add("hidden")
+        answerModify.classList.add("hidden")
+        inputMot.classList.add("hidden")
+        feedBack.classList.toggle("hidden")
+        nextBtn.classList.toggle("hidden")
+console.log("startBtn",startBtn)
+trainingWordSentence.classList.toggle("hidden")
+startBtn.classList.remove("hidden")
+
+trainingConfirm.addEventListener("click",function(){handlerOnTrainingConfirmClick(trainer)})
+answerModify.addEventListener("click",function(){answerReset()})
+validBtn.addEventListener("click",function(){handlerOnTrainingValidClick(trainer)})
+        startBtn.addEventListener("click",function(){
+            trainingWordSentence.classList.toggle("hidden")
+            trainingConsigne.classList.toggle("hidden")
+            nextBtn.classList.toggle("hidden")
+            feedBack.classList.toggle("hidden")
+            startBtn.classList.toggle("hidden")
+            trainingNextWord(trainer)})
+
         inputMot.focus()
         inputMot.removeAttribute("readonly")
         inputMot.select()
@@ -126,6 +152,9 @@ function handlerOnTrainingBtnClick(){
 }
 
 function trainingNextWord(trainer){
+    if(!startBtn.classList.contains("hidden")){trainingWord.classList.toggle("hidden")}
+    if(!trainingWord.classList.contains("hidden")){trainingWord.classList.toggle("hidden")}
+    if(!feedBack.classList.contains("hidden")){trainingWord.classList.toggle("hidden")}
     console.log("trainer._trainingCount === trainer.trainingMaxCount",trainer._trainingCount, trainer.trainingMaxCount,trainer._trainingCount === trainer.trainingMaxCount)
     if(trainer._trainingCount === trainer.trainingMaxCount){
         feedBack.textContent = `Ton score final est de ${trainer._score}/${trainer.trainingMaxCount}`}
@@ -134,62 +163,65 @@ function trainingNextWord(trainer){
     feedBack.classList.toggle("hidden")
 
     inputMot.value = ""
-     hiddenTO(motAEcrire,trainer)
-     
+     hiddenTO(trainingWord)
  
-       motAEcrire.textContent =  trainer.getNextWord()
+       trainingWord.textContent =  trainer.getNextWord()
        //displayBtn.removeEventListener("click",clickHandlerTrainingBtn,{"once":true})
-       validInput.classList.toggle("hidden")
-       trainingNext.classList.toggle("hidden")}
+       validBtn.classList.toggle("hidden")
+       nextBtn.classList.toggle("hidden")
+    }
        inputMot.focus()
        inputMot.select()
   }
 
-function trainingCourse(trainer){
-    validInput.addEventListener("click",function(){handlerOnTrainingValidClick(trainer)},{"once":true})
 
-}
 
 function handlerOnTrainingValidClick(trainer){
+    if(inputMot.value){
+    if(!inputMot.classList.contains("hidden")){inputMot.classList.toggle("hidden")}
     console.log("click")
     feedBack.classList.toggle("hidden")
     console.log(trainer._trainingCount)
     console.log({trainer})
     trainingCount.innerText = trainer._trainingCount
-    console.log(`Il fallait écrire "${motAEcrire.textContent}".`)
+    console.log(`Il fallait écrire "${trainingWord.textContent}".`)
     console.log(`La réponse donnée est "${inputMot.value}".`)
 
     feedBack.textContent = `Ta réponse est "${inputMot.value}", confirme pour passer au mot suivant.`
-    trainingConfirm.addEventListener("click",function(){handlerOnTrainingConfirmClick(trainer)})
-
-    if (inputMot.value === motAEcrire.textContent){
-    motAEcrire.classList.toggle("hidden")
-    trainer._score++
-        answerModify.addEventListener("click",function(){answerReset(trainer)})
-        answerModify.classList.toggle("hidden")
   
-    } else (feedBack.textContent = "Mauvaise réponse !")
-    motAEcrire.classList.toggle("hidden")
-    validInput.classList.toggle("hidden")
-    trainingNext.addEventListener("click",function(){trainingNextWord(trainer)},{"once":true})
-    trainingNext.classList.toggle("hidden")
-    
-  //  setTimeout(() => {motAEcrire.textContent =  trainer.getNextWord()},3000)
+    answerModify.classList.toggle("hidden")
+    trainingWord.classList.toggle("hidden")
+    validBtn.classList.toggle("hidden")
+    nextBtn.addEventListener("click",function(){trainingNextWord(trainer)})
+    trainingConfirm.classList.toggle("hidden")
+  //  setTimeout(() => {trainingWord.textContent =  trainer.getNextWord()},3000)
 
+  if(!trainingWord.classList.contains("hidden")){trainingWord.classList.toggle("hidden")}}
 }
 
 function handlerOnTrainingConfirmClick(trainer){
-
+    console.log("nextBtn contains hidden",nextBtn.classList.contains("hidden"))
+    nextBtn.classList.toggle("hidden")
+    trainingConfirm.classList.toggle("hidden")
+    feedBack.classList.remove("hidden")
+answerModify.classList.add("hidden")
+    if (inputMot.value === trainingWord.textContent){
+        trainer._score++
+    }
+        trainingNextWord(trainer)
 }
 
 function answerReset(trainer){
+    if(!nextBtn.classList.contains("hidden")){nextBtn.classList.toggle("hidden")}
     feedBack.classList.toggle("hidden")
-    trainingNext.classList.toggle("hidden")
-    validInput.classList.toggle("hidden")
-        answerModify.classList.toggle("hidden")
-        motAEcrire.classList.toggle("hidden")
+    answerModify.classList.add("hidden")
+    validBtn.classList.toggle("hidden")
+    trainingConfirm.classList.add("hidden")
+        trainingWord.classList.toggle("hidden")
     inputMot.value = null
-    
+    if(!inputMot.classList.contains("hidden")){inputMot.classList.toggle("hidden")}
+
+    hiddenTO(trainingWord,trainer)
 
 }
 async function clickHandlerTrainingBtn(){
@@ -197,11 +229,11 @@ async function clickHandlerTrainingBtn(){
     displayBtn.addEventListener("click",function() {    
        
 
-                 hiddenTO(motAEcrire)
+                 hiddenTO(trainingWord)
         console.log("laListe",laListe)
             trainingCard.classList.toggle("hidden")
             theListe.classList.toggle("hidden")
-           motAEcrire.textContent =  listeMot22[getRandomArbitrary(0,4)]
+           trainingWord.textContent =  listeMot22[getRandomArbitrary(0,4)]
            //displayBtn.removeEventListener("click",clickHandlerTrainingBtn,{"once":true})
            }
         ,{"once":true})
