@@ -1,6 +1,68 @@
+import {Training} from "./training.js"
+
+// Global Déclaration //
+
 const actualDate = new Date()
 const numeroSemaine = getWeekNumber(actualDate)
+
+const displayCard = document.querySelector("#display-card")
+const displayBtn = displayCard.querySelector("#display-btn")
+const laListe = displayCard.querySelector("#la-liste")
+const messageWeekNumber = displayCard.querySelector("#message-week-number")
+const theListe = document.querySelector("#liste-mots")
+
 const listeMot22 = ["le soir","le matin","le midi","beau","un oiseau"]
+const listeMot15 = ["le chapeau","bonhomme","la fleur","un gâteau","il a","elle a"]
+
+
+const trainingCard = document.querySelector("#training-card")
+const motAEcrire = trainingCard.querySelector("#le-mot")
+const trainingCount = trainingCard.querySelector("#training-count")
+const trainingMaxCount = trainingCard.querySelector("#training-max-count")
+const validInput = document.querySelector("#training-valid")
+const trainingNext = document.querySelector("#training-next")
+const isCorrect = trainingCard.querySelector("#is-correct")
+const inputMot = trainingCard.querySelector("#input-mot")
+
+
+
+machination()
+
+/*
+trainingTry()
+
+function trainingTry(){
+
+console.log("Création d'une nouvelle instance de Training...")
+const newTraining = new Training(listeMot22,"litEtEcris")
+console.log("Nouvelle instance créée : ",{newTraining})
+console.log("newTraining.trainingCountNumber ",newTraining.trainingCountNumber)
+console.log("Incrementation de trainingCount.")
+newTraining.trainingCountIncrement()
+console.log("newTraining.trainingCountNumber ",newTraining.trainingCountNumber)
+
+console.log("Affiche la liste des mots restants ...")
+console.log(newTraining.getRemainingWord())
+
+newTraining.trainingCountIncrement()
+console.log("Récupération d'un des mots de la liste : ", newTraining.getNextWord())
+console.log("Récupération d'un des mots de la liste : ", newTraining.getNextWord())
+
+console.log("Affiche la liste des mots restants ...")
+console.log(newTraining.getRemainingWord())
+newTraining.trainingCountIncrement()
+
+console.log("Récupération d'un des mots de la liste : ", newTraining.getNextWord())
+
+console.log(newTraining.getRemainingWord())
+console.log("newTraining.trainingCountNumber : ",newTraining.trainingCountNumber)
+}
+*/
+
+function machination(){
+appendListeDesMots()
+eventOnTrainingBtnClick()
+}
 
 function getWeekNumber(d) {
     // Copy date so don't modify original
@@ -16,28 +78,115 @@ function getWeekNumber(d) {
     return [weekNo];
 }
 
-const displayCard = document.querySelector("#display-card")
-const messageWeekNumber = displayCard.querySelector("#message-week-number")
-messageWeekNumber.textContent += numeroSemaine
-const ulListe = displayCard.querySelector("#liste-mots")
-console.log(ulListe)
-const newDiv = document.createElement("div")
-newDiv.textContent = listeMot22.join(" - ")
-ulListe.append(newDiv)
+function appendListeDesMots(){
+    messageWeekNumber.textContent += numeroSemaine
+    const ulListe = displayCard.querySelector("#liste-mots")
+    console.log(ulListe)
+    const newDiv = document.createElement("div")
+    newDiv.id = "la-liste"
+    newDiv.textContent = listeMot15.join(" - ")
+    ulListe.append(newDiv)
+}
 
-const TrainingCard = document.querySelector("#training-card")
-const motAEcrire = TrainingCard.querySelector("#mot-a-ecrire")
+function hiddenTO(motAEcrire,trainer) {setTimeout(() => {
+    trainingCourse(trainer)
 
+    const displayBtn = document.querySelector("#display-btn")
+    displayBtn.addEventListener("click",clickHandlerTrainingBtn,{"once":true})
+    motAEcrire.classList.toggle("hidden")
+}, 5000);
 
-const displayBtn = displayCard.querySelector("#display-btn")
+}
 
-displayBtn.addEventListener("click", () => {
-TrainingCard.classList.toggle("hidden")
-motAEcrire.textContent = listeMot22[getRandomArbitrary(0,4)]
-})
+function eventOnTrainingBtnClick(){
+
+    displayBtn.addEventListener("click",handlerOnTrainingBtnClick
+        ,{"once":true})
+    
+}
+
+function handlerOnTrainingBtnClick(){
+    isCorrect.classList.toggle("hidden")
+    trainingCount.innerText = 0
+
+        var trainer = new Training(listeMot15,"test")
+        displayBtn.classList.toggle("hidden")
+        trainingCard.classList.toggle("hidden")
+            theListe.classList.toggle("hidden")
+            validInput.classList.toggle("hidden")
+            trainingNext.classList.toggle("hidden")
+        trainingNextWord(trainer)
+        inputMot.focus()
+        inputMot.select()
+
+}
+
+function trainingNextWord(trainer){
+    console.log("trainer._trainingCount === trainer.trainingMaxCount",trainer._trainingCount, trainer.trainingMaxCount,trainer._trainingCount === trainer.trainingMaxCount)
+    if(trainer._trainingCount === trainer.trainingMaxCount){
+        isCorrect.textContent = `Ton score final est de ${trainer._score}/${trainer.trainingMaxCount}`}
+        else {
+    trainingMaxCount.textContent = trainer.totalWordCount
+    isCorrect.classList.toggle("hidden")
+
+    inputMot.value = ""
+     hiddenTO(motAEcrire,trainer)
+     
+ 
+       motAEcrire.textContent =  trainer.getNextWord()
+       //displayBtn.removeEventListener("click",clickHandlerTrainingBtn,{"once":true})
+       validInput.classList.toggle("hidden")
+       trainingNext.classList.toggle("hidden")}
+       inputMot.focus()
+       inputMot.select()
+  }
+
+function trainingCourse(trainer){
+    validInput.addEventListener("click",function(){handlerOnTrainingValidClick(trainer)},{"once":true})
+
+}
+
+function handlerOnTrainingValidClick(trainer){
+    console.log("click")
+    isCorrect.classList.toggle("hidden")
+    console.log(trainer._trainingCount)
+    console.log({trainer})
+    trainingCount.innerText = trainer._trainingCount
+    console.log(`Il fallait écrire "${motAEcrire.textContent}".`)
+    console.log(`La réponse donnée est "${inputMot.value}".`)
+
+    if (inputMot.value === motAEcrire.textContent){
+        isCorrect.textContent = "Bien joué !"
+        trainer._score++
+        isCorrect.classList.toggle("bg-green-500")
+        isCorrect.classList.toggle("bg-orange-400")
+    } else (isCorrect.textContent = "Mauvaise réponse !")
+    motAEcrire.classList.toggle("hidden")
+    validInput.classList.toggle("hidden")
+    trainingNext.addEventListener("click",function(){trainingNextWord(trainer)},{"once":true})
+    trainingNext.classList.toggle("hidden")
+    
+  //  setTimeout(() => {motAEcrire.textContent =  trainer.getNextWord()},3000)
+
+}
+
+async function clickHandlerTrainingBtn(){
+    
+    displayBtn.addEventListener("click",function() {    
+       
+
+                 hiddenTO(motAEcrire)
+        console.log("laListe",laListe)
+            trainingCard.classList.toggle("hidden")
+            theListe.classList.toggle("hidden")
+           motAEcrire.textContent =  listeMot22[getRandomArbitrary(0,4)]
+           //displayBtn.removeEventListener("click",clickHandlerTrainingBtn,{"once":true})
+           }
+        ,{"once":true})
+}
 
 function getRandomArbitrary(min, max) {
     return Math.round(Math.random() * (max - min) + min);
-  }
+}
 
-  console.log("getRandomArbitrary",getRandomArbitrary(0,4))
+ 

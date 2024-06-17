@@ -5,26 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tailwind test</title>
     <link rel="stylesheet" href="src/output.css">
-    <script src="main.js" defer></script>
+    <script type="module" src="main.js" defer></script>
+    <script type="module" src="/training.js"></script>
 </head>
-<body>
+<body class="absolute w-full h-full bg-slate-100">
 
-<div id="display-card" class="shadow-sm m-4 text-center bg-lime-200 flex-shrink w-1/2 border rounded-lg">
-        <h1 class="text-5xl text-black p-4 justify-center">Le trésor des mots</h1>
-        <div id="message-week-number" class="text-xl font-bold justify-center">Dictée de la semaine </div>
-        <ul id="liste-mots"></ul>
-        <div id="display-btn" class="flex flex-row justify-evenly">
-            <button class="bg-yellow-300 rounded-md p-2 shadow-md m-3">Entrainement</button>
-            <button class="bg-yellow-300 rounded-md p-2 shadow-md m-3">Examen</button>
+    <div class="relative w-full h-full align-middle top-1/2 bot-1/2" id="main-view">
+        <div class="flex flex-col flex-wrap items-center h-max">
+            <div id="display-card" class="items-center flex-shrink inline-block w-1/4 text-center align-middle border rounded-lg shadow-sm bg-lime-200">
+                <h1 class="justify-center p-4 text-5xl text-slate-900">
+                    Le trésor des mots
+                </h1>
+                <div id="message-week-number" class="justify-center text-xl font-bold text-slate-900">
+                    Dictée de la semaine 
+                </div>
+                <ul class="text-xl" id="liste-mots"></ul>
+                <div id="display-btn" class="flex flex-row justify-evenly">
+                    <button class="p-2 m-3 bg-yellow-300 rounded-md shadow-md">Entrainement</button>
+                    <button class="p-2 m-3 bg-yellow-300 rounded-md shadow-md">Examen</button>
+                </div>
+            </div>  
+
+            <div id="training-card" class="relative flex flex-col items-center hidden w-1/4 p-4 font-thin align-middle shadow-sm shadow-amber-400 bg-lime-200">
+                <div class="absolute top-0 right-0 flex flex-row float-right">
+                    <div id="training-count"></div>/<div></div><div id="training-max-count">
+                    </div>
+                </div>
+                <p id="mot-a-ecrire" class="flex items-center text-xl font-semibold rounded shadow-sm w-fit">Mot à écrire : </p><p class="text-xl" id="le-mot"></p>
+                <input autocomplete="off" spellcheck="false" class="text-xl text-center" type="text" placeholder="écris ce mot~" id="input-mot">
+                <div class="flex flex-row">
+                    <button class="p-2 m-3 bg-yellow-300 rounded-md shadow-md" id="training-valid">Valider</button>
+                    <button class="hidden p-2 m-3 bg-yellow-300 rounded-md shadow-md" id="training-next">Suivant</button>
+                </div>
+                <div class="z-10 flex items-center hidden h-32 p-3 m-3 align-middle bg-orange-400 w-fit" id="is-correct">
+                </div>
+            </div>
+
+
         </div>
-    </div>  
-</div>
-
-<div id="training-card" class="hidden flex flex-col">
-    <span id="mot-a-ecrire">Mot à écrire : </span>
-    <input type="text" placeholder="mot à écrire" id="input-mot">
-</div>
-
+    </div>
 
 </body>
 </html>
