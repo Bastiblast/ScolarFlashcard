@@ -98,7 +98,7 @@ this._result.push(result)
             console.log("res",res,{toDo},{Do})
             const isCorrect = toDo === Do ? "égale à" : "différent de"
             const isCorrectClass = toDo === Do ? "bg-green-500" : "bg-red-500"
-            result.push(`<p${isCorrectClass}><b>${Do}</b> est ${isCorrect} <b>${toDo}</b></p>`)
+            result.push(`<p class="${isCorrectClass} p-2 rounded-md ring-2"><b>${Do}</b> est ${isCorrect} <b>${toDo}</b></p>`)
         })
         const joinResult = result.join(",").replaceAll(",","")
         console.log({joinResult})
