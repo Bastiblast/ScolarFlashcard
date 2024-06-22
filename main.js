@@ -13,7 +13,7 @@ const theListe = document.querySelector("#liste-mots")
 
 const listeMot22 = ["le soir","le matin","le midi","beau","un oiseau"]
 const listeMot15 = ["le chapeau","bonhomme","la fleur","un gâteau","il a","elle a"]
-
+const listeMot16 = ["le mois","la chambre","l'année","mes","demain"]
 
 const trainingCard = document.querySelector("#training-card")
 const trainingConsigne = document.querySelector("#consigne")
@@ -95,7 +95,7 @@ function appendListeDesMots(){
     console.log(ulListe)
     const newDiv = document.createElement("div")
     newDiv.id = "la-liste"
-    newDiv.textContent = listeMot15.join(" - ")
+    newDiv.textContent = listeMot16.join(" - ")
     ulListe.append(newDiv)
 }
 
@@ -106,7 +106,7 @@ function hiddenTO(trainingWord,wordHide) {
         inputMot.removeAttribute("readonly")
         inputMot.select()
     if(!trainingWord.classList.contains("hidden")){trainingWord.classList.toggle("hidden")}
-}, 1000);
+}, 5000);
 
 }
 
