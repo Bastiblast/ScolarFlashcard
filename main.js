@@ -119,7 +119,7 @@ function eventOnTrainingBtnClick(){
 function handlerOnTrainingBtnClick(){
     trainingCount.innerText = 0
 
-        var trainer = new TrainingSession(listeMot15,"test")
+        var trainer = new TrainingSession(listeMot16,"test")
         displayBtn.classList.add("hidden")
         trainingCard.classList.add("hidden")
             theListe.classList.add("hidden")
