@@ -1,4 +1,4 @@
-import {Training, TrainingSession} from "./training.js"
+import {Training, TrainingSession,TrainingCard} from "./training.js"
 
 // Global Déclaration //
 
@@ -14,6 +14,12 @@ const theListe = document.querySelector("#liste-mots")
 const listeMot22 = ["le soir","le matin","le midi","beau","un oiseau"]
 const listeMot15 = ["le chapeau","bonhomme","la fleur","un gâteau","il a","elle a"]
 const listeMot16 = ["le mois","la chambre","l'année","mes","demain"]
+
+const listesMots = [
+    {"id":14,"liste":["le soir","le matin","le midi","beau","un oiseau"]},
+    {"id":15,"liste":["le chapeau","bonhomme","la fleur","un gâteau","il a","elle a"]},
+    {"id":16,"liste":["le mois","la chambre","l'année","mes","demain"]}
+]
 
 const trainingCard = document.querySelector("#training-card")
 const trainingConsigne = document.querySelector("#consigne")
@@ -36,9 +42,9 @@ machination()
 
 // Training test
 
-const test = new Training()
-console.log(test)
-
+const test = new TrainingCard("cardTest")
+//console.log(test.trainingCardLauncher())
+document.querySelector("#card-holder").append(test.trainingCardLauncher())
 /*
 trainingTry()
 
@@ -119,7 +125,7 @@ function eventOnTrainingBtnClick(){
 function handlerOnTrainingBtnClick(){
     trainingCount.innerText = 0
 
-        var trainer = new TrainingSession(listeMot16,"test")
+        var trainer = new TrainingSession(listesMots,"test")
         displayBtn.classList.add("hidden")
         trainingCard.classList.add("hidden")
             theListe.classList.add("hidden")
@@ -248,7 +254,7 @@ async function clickHandlerTrainingBtn(){
         console.log("laListe",laListe)
             trainingCard.classList.toggle("hidden")
             theListe.classList.toggle("hidden")
-           trainingWord.textContent =  listeMot22[getRandomArbitrary(0,4)]
+           trainingWord.textContent =  listesMots[getRandomArbitrary(0,4)]
            //displayBtn.removeEventListener("click",clickHandlerTrainingBtn,{"once":true})
            }
         ,{"once":true})
