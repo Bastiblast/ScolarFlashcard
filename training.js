@@ -64,14 +64,14 @@ return this.trainingCard
 }
 
 export class TrainingCard {
-
+    results = []
     listesMots = listesMots
-    
     constructor(cardId){
 
         
-        this.trainingCard = document.createElement("div")
-        this.trainingCard.classList = "relative flex flex-col items-center w-1/2 md:w-3/4"
+this.trainingCard = document.createElement("div")
+this.trainingCard.classList = "relative flex flex-col items-center w-1/2 md:w-3/4"
+
 this.trainingCard.innerHTML = `
 <div id="${cardId}" 
 class="relative flex flex-col items-center w-1/4 h-auto 
@@ -94,12 +94,12 @@ p-4 font-thin align-middle shadow-sm max-md:w-3/4 shadow-amber-300/80 bg-lime-30
     <p id="training-next-word" class="flex items-center text-xl font-semibold rounded shadow-sm w-fit">
     Mot à écrire : </p>
     
-    <p class="text-xl" id="le-mot"></p>
+    <p class="text-xl" id="training-word"></p>
 
     <div class="z-10 flex flex-col items-center p-3 m-3 text-center align-middle 
     rounded-xl bg-amber-200/70 w-fit" id="training-feedback"></div>
 
-    <input readonly="readonly" autocapitalize="off" autocomplete="off" spellcheck="false" 
+    <input autocapitalize="off" autocomplete="off" spellcheck="false" 
     class="text-xl text-center" type="text" placeholder="écris ce mot~" id="training-user-input">
     
     <div class="flex flex-row" id="training-buttons">
@@ -122,7 +122,9 @@ p-4 font-thin align-middle shadow-sm max-md:w-3/4 shadow-amber-300/80 bg-lime-30
 </div>
 `
 
-this.trainingNextWord = this.trainingCard.querySelector("#training-next-word")
+this.trainingWroteThis = this.trainingCard.querySelector("#training-next-word")
+
+this.trainingWord = this.trainingCard.querySelector("#training-word")
 
 this.explanations = this.trainingCard.querySelector("#explanations")
 
@@ -154,7 +156,9 @@ this.trainingFeedBack = this.trainingCard.querySelector("#training-feedback")
 
 this.userInput = this.trainingCard.querySelector("#training-user-input")
 
-this.displayElement = [this.explanations,this.trainingNextWord,this.trainingCountBox,this.startButton,this.validButton,this.modifyButton,this.confirmButton,this.nextButton,this.trainingFeedBack,this.userInput]
+this.displayElement = [this.trainingList,this.trainingWord,this.selectedList,this.explanations,
+    this.trainingWroteThis,this.startButton,this.validButton,this.modifyButton,
+    this.confirmButton,this.nextButton,this.trainingFeedBack,this.userInput]
 
 
 this.initializeEventListenerOnButtonClick()
@@ -164,8 +168,20 @@ this.initializeEventListenerOnButtonClick()
         this.displayElement.forEach(element => element.classList.add("hidden"))
     }
 
+    hideAndReveal(){
+        setTimeout(() => {
+            this.trainingWord.classList.add("hidden")
+            this.userInput.classList.remove("hidden")
+            this.userInput.focus()
+            this.userInput.select()
+        },1000)
+    }
     trainingCardLauncher(){
         this.hideAllMobileElement()
+        document.querySelector("#display-card").classList.add("hidden") 
+        this.trainingCounter.classList.remove("hidden")
+        this.trainingMaxCount.classList.remove("hidden")
+        this.selectedList.classList.remove("hidden")
         this.startButton.classList.remove("hidden")
         this.explanations.classList.remove("hidden")
         Object.values(listesMots)
@@ -175,10 +191,9 @@ this.initializeEventListenerOnButtonClick()
             optionList.value = option
             optionList.textContent = option 
             this.trainingList.append(optionList)})
-            this.selectedList.textContent = listesMots.filter(mot => 
+
+        this.selectedList.textContent = listesMots.filter(mot => 
                 mot.id == this.trainingList.value)[0].liste
-                console.log(listesMots.filter(mot => 
-                    mot.id == this.trainingList.value))
 document.querySelector("#main-view").append(this.trainingCard)
     }
 
@@ -190,29 +205,71 @@ document.querySelector("#main-view").append(this.trainingCard)
         this.nextButton.addEventListener("click",() => {this.handlerEventOnNextClick()})
         this.modifyButton.addEventListener("click",() => {this.handlerEventOnModifyClick()})
         this.confirmButton.addEventListener("click",() => {this.handlerEventOnConfirmClick()})
+        this.trainingList.addEventListener("click",() => {this.handlerEventOnSelectorClick()})
     }
 
     handlerEventOnStartClick(){
         this.hideAllMobileElement()
-        this.trainingNextWord.classList.remove("hidden")
+        this.trainingCountBox.classList.remove("hidden")
+        this.selectedList.classList.add("hidden")
+        this.trainingWord.classList.remove("hidden")
+        this.trainingWroteThis.classList.remove("hidden")
         this.validButton.classList.remove("hidden")
-
+        const thatList = this.selectedList.textContent.split(",")
+        console.log({thatList})
+        this.trainer = new TrainingSession(thatList,"test")
+        console.log(this.trainer)
+        this.trainingMaxCount.textContent = this.trainer.wordList.length
+        this.trainingCounter.textContent = 0
+        this.handlerEventOnNextClick(this.trainer)
     }
 
     handlerEventOnValidClick(){
-        console.log("click")
+        if (this.userInput.value){
+            console.log("click")
+            this.hideAllMobileElement()
+            this.trainingFeedBack.classList.remove("hidden")
+            this.modifyButton.classList.remove("hidden")
+            this.confirmButton.classList.remove("hidden")
+            this.trainingFeedBack.innerHTML = `Ta réponse est <strong>${this.userInput.value}</strong> confirmer ?`
+        }
     }
 
     handlerEventOnNextClick(){
         console.log("click")
+        this.hideAllMobileElement()
+        this.trainingWroteThis.classList.remove("hidden")
+        this.trainingWord.classList.remove("hidden")
+        this.validButton.classList.remove("hidden")
+        this.trainingWord.textContent = this.trainer.getNextWord()
+        this.hideAndReveal()
     }
 
     handlerEventOnModifyClick(){
+        this.hideAllMobileElement()
+        this.userInput.value = null
+        this.trainingWroteThis.classList.remove("hidden")
+        this.trainingWord.classList.remove("hidden")
+        this.validButton.classList.remove("hidden")
+        this.hideAndReveal()
         console.log("click")
     }
 
     handlerEventOnConfirmClick(){
+        this.trainer.newResult(this.userInput.value)
+        this.trainingCounter.textContent = this.trainer._trainingCount
         console.log("click")
+        if (this.trainer._trainingCount === this.trainer.trainingMaxCount){
+            this.trainingFeedBack.innerHTML = this.trainer.renderResult()
+        } else {
+        this.handlerEventOnNextClick()}
+    }
+
+    handlerEventOnSelectorClick(){
+        this.selectedList.textContent = listesMots.filter(mot => 
+            mot.id == this.trainingList.value)[0].liste
+            console.log(listesMots.filter(mot => 
+                mot.id == this.trainingList.value))
     }
 }
 
@@ -252,8 +309,10 @@ export class TrainingSession {
         this._trainingCount += 1
     }
 
-    newResult(result){
-this._result.push(result)
+    newResult(input){
+const newResult = {"word":this._processingWord,"answer":input,"correct":this._processingWord===input}
+console.log(newResult)
+this._result.push(newResult)
     }
 
     get trainingCountNumber(){
@@ -264,11 +323,10 @@ this._result.push(result)
         const result = []
         console.log("this._result",this._result)
         this._result.forEach(res => {
-            const [toDo, Do] = res
-            console.log("res",res,{toDo},{Do})
-            const isCorrect = toDo === Do ? "égale à" : "différent de"
-            const isCorrectClass = toDo === Do ? "bg-green-500" : "bg-red-500"
-            result.push(`<p class="${isCorrectClass} p-2 rounded-md ring-2"><b>${Do}</b> est ${isCorrect} <b>${toDo}</b></p>`)
+            console.log({res})
+            const isCorrect = res.correct ? "égale à" : "différent de"
+            const isCorrectClass = res.correct ? "bg-green-500" : "bg-red-500"
+            result.push(`<p class="${isCorrectClass} p-2 rounded-md ring-2"><b>${res.answer}</b> est ${isCorrect} <b>${res.word}</b></p>`)
         })
         const joinResult = result.join(",").replaceAll(",","")
         console.log({joinResult})
@@ -280,9 +338,9 @@ this._result.push(result)
         if(!this._remainingWord){this._remainingWord = [...this.wordList]}
 const ramdom = this.getRandomArbitrary(1, this._remainingWord.length)  - 1
 //console.log({ramdom})      
-this._processingWord = this._remainingWord.splice(ramdom,1)
+this._processingWord = this._remainingWord.splice(ramdom,1)[0]
 console.log("START getNextWord return this._processingWord   : ",this._processingWord )
-return this._processingWord    
+return this._processingWord
 }
 
     getRandomArbitrary(min, max) {

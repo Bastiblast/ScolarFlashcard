@@ -44,7 +44,7 @@ machination()
 
 const test = new TrainingCard("cardTest")
 //console.log(test.trainingCardLauncher())
-document.querySelector("#card-holder").append(test.trainingCardLauncher())
+
 /*
 trainingTry()
 
@@ -98,7 +98,6 @@ function getWeekNumber(d) {
 function appendListeDesMots(){
     messageWeekNumber.textContent += numeroSemaine
     const ulListe = displayCard.querySelector("#liste-mots")
-    console.log(ulListe)
     const newDiv = document.createElement("div")
     newDiv.id = "la-liste"
     newDiv.textContent = listeMot16.join(" - ")
@@ -118,7 +117,7 @@ function hiddenTO(trainingWord,wordHide) {
 
 function eventOnTrainingBtnClick(){
 
-    displayBtn.addEventListener("click",function(){handlerOnTrainingBtnClick()})
+    displayBtn.addEventListener("click",function(){test.trainingCardLauncher()})
     
 }
 
