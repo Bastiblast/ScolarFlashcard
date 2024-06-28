@@ -1,9 +1,10 @@
-const listesMots = [
+import { listesMots } from "./listesMots.js"
+/*const listesMots = [
     {"id":14,"liste":["le soir","le matin","le midi","beau","un oiseau"]},
     {"id":15,"liste":["le chapeau","bonhomme","la fleur","un gâteau","il a","elle a"]},
     {"id":16,"liste":["le mois","la chambre","l'année","mes","demain"]}
 ]
-
+*/
 export class Training {
     constructor(cardId){
 this.trainingCard = document.createElement("div")
@@ -181,12 +182,15 @@ this.initializeEventListenerOnButtonClick()
         document.querySelector("#display-card").classList.add("hidden") 
         this.trainingCounter.classList.remove("hidden")
         this.trainingMaxCount.classList.remove("hidden")
+        this.trainingList.classList.remove("hidden")
         this.selectedList.classList.remove("hidden")
         this.startButton.classList.remove("hidden")
         this.explanations.classList.remove("hidden")
+        console.log(Object.values(listesMots))
         Object.values(listesMots)
         .map(mot => mot["id"])
         .forEach(option => {
+            console.log({option})
             const optionList = document.createElement("option")
             optionList.value = option
             optionList.textContent = option 
@@ -257,9 +261,12 @@ document.querySelector("#main-view").append(this.trainingCard)
 
     handlerEventOnConfirmClick(){
         this.trainer.newResult(this.userInput.value)
+        this.userInput.value = null
         this.trainingCounter.textContent = this.trainer._trainingCount
         console.log("click")
         if (this.trainer._trainingCount === this.trainer.trainingMaxCount){
+            this.hideAllMobileElement()
+            this.trainingFeedBack.classList.remove("hidden")
             this.trainingFeedBack.innerHTML = this.trainer.renderResult()
         } else {
         this.handlerEventOnNextClick()}
@@ -267,9 +274,13 @@ document.querySelector("#main-view").append(this.trainingCard)
 
     handlerEventOnSelectorClick(){
         this.selectedList.textContent = listesMots.filter(mot => 
-            mot.id == this.trainingList.value)[0].liste
+            mot.id == this.trainingList.value)[0].liste.map(list => list.word)
+        
+        //listesMots.filter(mot => 
+        //    mot.id == this.trainingList.value)[0].liste
+    
             console.log(listesMots.filter(mot => 
-                mot.id == this.trainingList.value))
+                mot.id == this.trainingList.value)[0].liste.map(list => list.word))
     }
 }
 
@@ -320,7 +331,7 @@ this._result.push(newResult)
     }
 
     renderResult(){
-        const result = []
+        const result = [`<p>Ton score final est de ${this._trainingCount} sur ${this.wordList.length}</p>.`]
         console.log("this._result",this._result)
         this._result.forEach(res => {
             console.log({res})
