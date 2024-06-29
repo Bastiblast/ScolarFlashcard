@@ -143,7 +143,7 @@ document.querySelector("#main-view").append(this.trainingCard)
         this.nextButton.addEventListener("click",() => {this.handlerEventOnNextClick()})
         this.modifyButton.addEventListener("click",() => {this.handlerEventOnModifyClick()})
         this.confirmButton.addEventListener("click",() => {this.handlerEventOnConfirmClick()})
-        this.trainingList.addEventListener("click",() => {this.handlerEventOnSelectorClick()})
+        this.trainingList.addEventListener("change",() => {this.handlerEventOnSelectorClick()})
     }
 
     handlerEventOnStartClick(){
