@@ -1,75 +1,10 @@
-import { listesMots } from "./listesMots.js"
-/*const listesMots = [
-    {"id":14,"liste":["le soir","le matin","le midi","beau","un oiseau"]},
-    {"id":15,"liste":["le chapeau","bonhomme","la fleur","un gâteau","il a","elle a"]},
-    {"id":16,"liste":["le mois","la chambre","l'année","mes","demain"]}
-]
-*/
-export class Training {
-    constructor(cardId){
-this.trainingCard = document.createElement("div")
-this.trainingCard.classList = "relative flex flex-col items-center hidden w-1/4 p-4 font-thin align-middle shadow-sm max-md:w-3/4 shadow-amber-400 bg-lime-200"
-this.trainingCard.id = cardId
-
-const traingNextWord = document.createElement("span")
-traingNextWord.id = "#next-word"
-
-this.trainingCountBox = document.createElement("div")
-this.trainingCountBox.classList = "absolute top-0 right-0 flex flex-row float-right"
-this.trainingCountBox.id = "training-count-div"
-
-this.trainingCount = document.createElement("span")
-this.trainingCount.id = "#training-count"
-
-this.trainingMaxCount = document.createElement("span")
-this.trainingMaxCount.id = "#training-max-count"
-
-const startButton = document.createElement("button")
-startButton.id = "#training-start"
-startButton.classList = "hidden p-2 m-3 bg-yellow-300 rounded-md shadow-md"
-
-const validButton = document.createElement("button")
-validButton.id = "#training-valid"
-validButton.classList = "hidden p-2 m-3 bg-yellow-300 rounded-md shadow-md"
-
-const nextButton = document.createElement("button")
-nextButton.id = "#training-next"
-nextButton.classList = "hidden p-2 m-3 bg-yellow-300 rounded-md shadow-md"
-
-const modifyButton = document.createElement("button")
-modifyButton.id = "#answer-modify"
-modifyButton.classList = "hidden p-2 m-3 bg-yellow-300 rounded-md shadow-md"
-
-const confirmButton = document.createElement("button")
-confirmButton.id = "#training-confirm"
-confirmButton.classList = "hidden p-2 m-3 bg-yellow-300 rounded-md shadow-md"
-
-const feedBack = document.createElement("div")
-feedBack.id = "#training-feedback"
-
-const wordInput = document.createElement("input")
-wordInput.id = "#word-input"
-wordInput.classList = "flex items-center text-xl font-semibold rounded shadow-sm w-fit"
-
-this.trainingCard.append(traingNextWord)
-this.trainingCountBox.append(this.trainingCount)
-this.trainingCountBox.append(this.trainingMaxCount)
-this.trainingCard.append(this.trainingCountBox)
-this.trainingCard.append(startButton)
-
-}
-
-    openTrainingCard(){
-return this.trainingCard
-    }
-}
+import { TrainingSession } from "./trainingSession.js"
 
 export class TrainingCard {
     results = []
-    listesMots = listesMots
-    constructor(cardId){
+    constructor(cardId,listesMots){
 
-        
+this.listesMots = listesMots        
 this.trainingCard = document.createElement("div")
 this.trainingCard.classList = "relative flex flex-col items-center w-1/2 md:w-3/4"
 
@@ -186,8 +121,7 @@ this.initializeEventListenerOnButtonClick()
         this.selectedList.classList.remove("hidden")
         this.startButton.classList.remove("hidden")
         this.explanations.classList.remove("hidden")
-        console.log(Object.values(listesMots))
-        Object.values(listesMots)
+        Object.values(this.listesMots)
         .map(mot => mot["id"])
         .forEach(option => {
             console.log({option})
@@ -196,8 +130,8 @@ this.initializeEventListenerOnButtonClick()
             optionList.textContent = option 
             this.trainingList.append(optionList)})
 
-        this.selectedList.textContent = listesMots.filter(mot => 
-                mot.id == this.trainingList.value)[0].liste
+        this.selectedList.textContent = this.listesMots.filter(mot => 
+            mot.id == this.trainingList.value)[0].liste.map(list => list.word)
 document.querySelector("#main-view").append(this.trainingCard)
     }
 
@@ -221,7 +155,9 @@ document.querySelector("#main-view").append(this.trainingCard)
         this.validButton.classList.remove("hidden")
         const thatList = this.selectedList.textContent.split(",")
         console.log({thatList})
-        this.trainer = new TrainingSession(thatList,"test")
+        const trainingSessionList = this.listesMots.filter(mot => 
+            mot.id == this.trainingList.value)[0]
+        this.trainer = new TrainingSession(trainingSessionList,"test")
         console.log(this.trainer)
         this.trainingMaxCount.textContent = this.trainer.wordList.length
         this.trainingCounter.textContent = 0
@@ -246,6 +182,7 @@ document.querySelector("#main-view").append(this.trainingCard)
         this.trainingWord.classList.remove("hidden")
         this.validButton.classList.remove("hidden")
         this.trainingWord.textContent = this.trainer.getNextWord()
+        console.log("this.trainingList",this.trainer.trainingList)
         this.hideAndReveal()
     }
 
@@ -273,89 +210,12 @@ document.querySelector("#main-view").append(this.trainingCard)
     }
 
     handlerEventOnSelectorClick(){
-        this.selectedList.textContent = listesMots.filter(mot => 
+        this.selectedList.textContent = this.listesMots.filter(mot => 
             mot.id == this.trainingList.value)[0].liste.map(list => list.word)
         
         //listesMots.filter(mot => 
         //    mot.id == this.trainingList.value)[0].liste
-    
-            console.log(listesMots.filter(mot => 
-                mot.id == this.trainingList.value)[0].liste.map(list => list.word))
+          
+       
     }
 }
-
-export class TrainingSession {
-    _trainingCount = 0
-    constructor(wordList,name){
-        this.wordList = wordList
-        this.name = name
-    }
-    _remainingWord = undefined
-    _processingWord = ""
-    _score = 0
-    _result = []
-    getRemainingWord(){
-        
-        if(!this._remainingWord){this._remainingWord = [...this.wordList]}
-        console.log("START getRemainingWord return this._remainingWord ...",this._remainingWord)
-        return this._remainingWord
-    }
-
-    Initialize(){
-        
-    console.log(this.wordList)
-    }
-
-    get totalWordCount(){
-        return this.wordList.length
-    }
-
-    increaseScore(){
-        this._score ++
-    }
-        get trainingMaxCount(){
-            return this.wordList.length
-        }
-    trainingCountIncrement(){
-        this._trainingCount += 1
-    }
-
-    newResult(input){
-const newResult = {"word":this._processingWord,"answer":input,"correct":this._processingWord===input}
-console.log(newResult)
-this._result.push(newResult)
-    }
-
-    get trainingCountNumber(){
-        return this._trainingCount
-    }
-
-    renderResult(){
-        const result = [`<p>Ton score final est de ${this._trainingCount} sur ${this.wordList.length}</p>.`]
-        console.log("this._result",this._result)
-        this._result.forEach(res => {
-            console.log({res})
-            const isCorrect = res.correct ? "égale à" : "différent de"
-            const isCorrectClass = res.correct ? "bg-green-500" : "bg-red-500"
-            result.push(`<p class="${isCorrectClass} p-2 rounded-md ring-2"><b>${res.answer}</b> est ${isCorrect} <b>${res.word}</b></p>`)
-        })
-        const joinResult = result.join(",").replaceAll(",","")
-        console.log({joinResult})
-        return joinResult
-    }
-    getNextWord(){
-   
-        this.trainingCountIncrement()
-        if(!this._remainingWord){this._remainingWord = [...this.wordList]}
-const ramdom = this.getRandomArbitrary(1, this._remainingWord.length)  - 1
-//console.log({ramdom})      
-this._processingWord = this._remainingWord.splice(ramdom,1)[0]
-console.log("START getNextWord return this._processingWord   : ",this._processingWord )
-return this._processingWord
-}
-
-    getRandomArbitrary(min, max) {
-        return Math.round(Math.random() * (max - min) + min);
-    }
-}
-
