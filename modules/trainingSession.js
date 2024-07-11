@@ -8,6 +8,7 @@ export class TrainingSession {
     }
     _remainingWord = undefined
     _processingWord = ""
+    _processingBundle = ""
     _score = 0
     _result = []
     getRemainingWord(){
@@ -68,6 +69,16 @@ const ramdom = this.getRandomArbitrary(1, this._remainingWord.length)  - 1
 this._processingWord = this._remainingWord.splice(ramdom,1)[0]
 console.log("START getNextWord return this._processingWord   : ",this._processingWord )
 return this._processingWord
+}
+
+getNextBundle(){
+    const nextWord = this.getNextWord()
+    console.log({nextWord})
+    const fullWords = this.trainingList.liste.find(liste => liste.word === nextWord)
+       console.log({fullWords})
+   this._processingBundle = [fullWords.word,...fullWords.falseWord]
+   console.log(this._processingBundle)
+    return this._processingBundle
 }
 
     getRandomArbitrary(min, max) {

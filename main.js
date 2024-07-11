@@ -1,5 +1,6 @@
-import {TrainingCard} from "./modules/trainingTest.js"
+import {TrainingTest} from "./modules/trainingTest.js"
 import {listesMots} from "./listesMots.js"
+import { TrainingTrain } from "./modules/trainingTrain.js"
 // Global Déclaration //
 
 const actualDate = new Date()
@@ -17,11 +18,60 @@ machination()
 
 // Training test
 
-const test = new TrainingCard("cardTest",listesMots)
-//console.log(test.trainingCardLauncher())
+const test = new TrainingTest("cardTest",listesMots)
+//test.trainingCardLauncher()
 
-/*
-trainingTry()
+const newTest = new TrainingTrain("newTest",listesMots)
+console.log(newTest)
+
+newTest.getStarted()
+newTest.handlerEventOnStartClick({
+    "id": 14,
+    "liste": [
+        {
+            "word": "le soir",
+            "falseWord": [
+                "lessoir",
+                "le soar",
+                "le seaur"
+            ]
+        },
+        {
+            "word": "le matin",
+            "falseWord": [
+                "le mattin",
+                "le mathin",
+                "le matain"
+            ]
+        },
+        {
+            "word": "le midi",
+            "falseWord": [
+                "le midie",
+                "le mydi",
+                "le middi"
+            ]
+        },
+        {
+            "word": "beau",
+            "falseWord": [
+                "baux",
+                "bo",
+                "beauh"
+            ]
+        },
+        {
+            "word": "un oiseau",
+            "falseWord": [
+                "un oaseau",
+                "un oizeau",
+                "un oiso"
+            ]
+        }
+    ]
+})
+
+//trainingTry()
 
 function trainingTry(){
 
@@ -49,11 +99,11 @@ console.log("Récupération d'un des mots de la liste : ", newTraining.getNextWo
 console.log(newTraining.getRemainingWord())
 console.log("newTraining.trainingCountNumber : ",newTraining.trainingCountNumber)
 }
-*/
+
 
 function machination(){
 appendListeDesMots()
-eventOnTrainingBtnClick()
+eventOnGraduateBtnClick()
 }
 
 function getWeekNumber(d) {
@@ -77,12 +127,18 @@ function appendListeDesMots(){
     newDiv.id = "la-liste"
     newDiv.textContent = listeMot16.join(" - ")
     ulListe.append(newDiv)
-}
+} 
 
+
+function eventOnGraduateBtnClick(){
+
+    testBtn.addEventListener("click",function(){test.trainingCardLauncher()})
+    
+}
 
 function eventOnTrainingBtnClick(){
 
-    testBtn.addEventListener("click",function(){test.trainingCardLauncher()})
+    testBtn.addEventListener("click",function(){newTest.trainingCardLauncher()})
     
 }
  

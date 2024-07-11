@@ -1,17 +1,15 @@
 import { TrainingSession } from "./trainingSession.js"
 
-export class TrainingCard {
+export class TrainingTest {
     results = []
     constructor(cardId,listesMots){
 
 this.listesMots = listesMots        
 this.trainingCard = document.createElement("div")
-this.trainingCard.classList = "relative flex flex-col items-center w-1/2 md:w-3/4"
-
+this.trainingCard.classList = `relative flex flex-col items-center w-1/4 h-auto 
+font-thin align-middle shadow-sm max-md:w-3/4 shadow-amber-300/80 bg-lime-300`
+this.trainingCard.id = cardId
 this.trainingCard.innerHTML = `
-<div id="${cardId}" 
-class="relative flex flex-col items-center w-1/4 h-auto 
-p-4 font-thin align-middle shadow-sm max-md:w-3/4 shadow-amber-300/80 bg-lime-300">
 
     <div id="training-count-box" class="absolute top-0 right-0 flex flex-row float-right">
         <div id="training-counter"></div>
@@ -55,7 +53,6 @@ p-4 font-thin align-middle shadow-sm max-md:w-3/4 shadow-amber-300/80 bg-lime-30
         id="training-modify">Modifier</button>
     </div>
 
-</div>
 `
 
 this.trainingWroteThis = this.trainingCard.querySelector("#training-next-word")
@@ -211,11 +208,6 @@ document.querySelector("#main-view").append(this.trainingCard)
 
     handlerEventOnSelectorClick(){
         this.selectedList.textContent = this.listesMots.filter(mot => 
-            mot.id == this.trainingList.value)[0].liste.map(list => list.word)
-        
-        //listesMots.filter(mot => 
-        //    mot.id == this.trainingList.value)[0].liste
-          
-       
+            mot.id == this.trainingList.value)[0].liste.map(list => list.word)       
     }
 }
