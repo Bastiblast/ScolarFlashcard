@@ -16,6 +16,7 @@ const listeMot16 = ["le mois","la chambre","l'année","mes","demain"]
 
 machination()
 
+
 // Training test
 
 const test = new TrainingTest("cardTest",listesMots)
@@ -23,7 +24,7 @@ const test = new TrainingTest("cardTest",listesMots)
 
 const newTest = new TrainingTrain("newTest",listesMots)
 console.log(newTest)
-
+/*
 newTest.getStarted()
 newTest.handlerEventOnStartClick({
     "id": 14,
@@ -70,7 +71,7 @@ newTest.handlerEventOnStartClick({
         }
     ]
 })
-
+*/
 //trainingTry()
 
 function trainingTry(){
